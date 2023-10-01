@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.get('/', function(_req, res, _next) {
   return res.json({
-    title: 'Express TS'
+    title: 'Express + TS + Nodemon'
   });
 });
 

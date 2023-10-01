@@ -13,6 +13,4 @@ services:
     volumes:
       - /app/node_modules
       - ./api:/app
-    command:
-      - npm
-      - start
+    command: "npm run start:dev"

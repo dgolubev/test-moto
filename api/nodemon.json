@@ -1,0 +1,12 @@
+{
+  "verbose": true,
+  "ignore": [
+    ".git",
+    "dist",
+    "node_modules/",
+    "coverage/"
+  ],
+  "watch": [],
+  "exec": "npx ts-node ./app.ts",
+  "ext": ".ts, .js"
+}
