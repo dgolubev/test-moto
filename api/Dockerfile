@@ -1,7 +1,8 @@
 FROM node
 
-WORKDIR /usr/app
-COPY package.json .
+WORKDIR /app
+COPY . .
+
 RUN npm install --quiet
 
-COPY . .
+EXPOSE 3000
