@@ -13,4 +13,6 @@ services:
     volumes:
       - /app/node_modules
       - ./api:/app
+    env_file:
+      - ./api/.env
     command: "npm run start:dev"

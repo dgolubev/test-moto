@@ -1,19 +1,18 @@
 import express from 'express';
+import routes from './routes';
+import config from './config';
 import logger from 'morgan';
-const port = 3000;
 
-import indexRouter from './routes/index';
+const port = config.APP_PORT;
 
 const app = express();
 
-app.use(logger('dev'));
+app.use(logger(config.LOG_LEVEL));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
-app.use('/', indexRouter);
+app.use(routes());
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
-
-// export default app;
