@@ -1,6 +1,10 @@
 
-# Motorola Test Task
+# Moto Test Task
 
-### directories:
+### Directories:
 - server: api
-- front: frontend
+- front: web
+
+### Run in docker
+run command in terminal:
+> ./docker-run.sh

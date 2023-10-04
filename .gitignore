@@ -1,2 +1,7 @@
 /api/dist
 /api/node_modules/
+
+/web/node_modules
+#/web/build
+#/web/node_modules
+v
