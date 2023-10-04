@@ -5,7 +5,7 @@ COPY . .
 
 RUN npm install --quiet
 
-RUN npm run build
+#RUN npm run build
 
 EXPOSE 8000
 
