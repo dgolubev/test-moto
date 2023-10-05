@@ -21,8 +21,8 @@ const authProvider = ((): AuthProvider => {
   };
 
   const signOut = async (): Promise<void> => {
-    _token = undefined;
     _isAuthenticated = false;
+    _token = undefined;
     _userName = undefined;
   };
 
