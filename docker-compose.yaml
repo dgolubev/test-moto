@@ -4,19 +4,19 @@ networks:
   default:
 
 services:
-#  app-api:
-#    build:
-#      context: ./api
-#    image: test-moto-api
-#    ports:
-#      - 3000:3000
-#    volumes:
-#      - /app/dist
-#      - /app/node_modules
-#      - ./api:/app
-#    env_file:
-#      - ./api/.env
-#    command: "npm run start:dev"
+  app-api:
+    build:
+      context: ./api
+    image: test-moto-api
+    ports:
+      - 3000:3000
+    volumes:
+      - /app/dist
+      - /app/node_modules
+      - ./api:/app
+    env_file:
+      - ./api/.env
+    command: "npm run start:dev"
 
   app-web:
     build:
