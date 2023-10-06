@@ -39,7 +39,6 @@ const router = createBrowserRouter([
       },
       {
         path: AppRoutes.IMAGES,
-        loader: ImagesPage.loader,
         Component: ImagesPage.component,
       },
     ],

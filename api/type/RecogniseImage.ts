@@ -8,6 +8,7 @@ enum RecogniseImageState {
 }
 
 type RecogniseImage = {
+  key: string;
   name: string;
   mimetype: string;
   tempFilePath: string;

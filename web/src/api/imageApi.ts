@@ -1,11 +1,18 @@
 import { RecogniseImage } from '../type/RecogniseImage';
 
 const ImageApi = (): {
-  list: () => Promise<RecogniseImage[]>,
+  getList: () => Promise<Record<string, RecogniseImage>>,
+  upload: (formData: FormData) => Promise<any>,
+  recognizeFaces: (key: string) => Promise<RecogniseImage>,
 } => {
-  const list = async (): Promise<RecogniseImage[]> => {
+  const apiUrl = process.env.REACT_APP_API_URL;
+
+  /**
+   * get list of images
+   */
+  const getList = async (): Promise<Record<string, RecogniseImage>> => {
     const res = await fetch(
-      process.env.REACT_APP_API_URL + '/images',
+      apiUrl + '/images',
       {
         method: 'GET',
         headers: {
@@ -16,7 +23,7 @@ const ImageApi = (): {
     const result = await res.json() as unknown as {
       success: boolean,
       message?: string,
-      data?: RecogniseImage[],
+      data?: Record<string, RecogniseImage>,
     };
 
     if (!result.success) {
@@ -26,8 +33,49 @@ const ImageApi = (): {
     return result.data!;
   }
 
+  /**
+   * Image upload
+   * @param formData form data
+   */
+  const upload = (formData: FormData): Promise<any> => {
+    return fetch(
+      apiUrl + '/images/upload',
+      {
+        method: 'POST',
+        body: formData,
+      } as RequestInit);
+  };
+
+
+  /**
+   * Recognize races on image
+   * @param key image key for recognition
+   */
+  const recognizeFaces = async (key: string): Promise<RecogniseImage> => {
+    const res = await fetch(
+      apiUrl + '/images/' + key + '/process',
+      {
+        method: 'POST',
+        'content-type': 'application/json',
+      } as RequestInit);
+
+    const result = await res.json() as unknown as {
+      success: boolean,
+      message?: string,
+      data?: RecogniseImage,
+    };
+
+    if (!result.success) {
+      throw new Error(result.message!);
+    }
+
+    return result.data!;
+  };
+
   return {
-    list,
+    getList,
+    upload,
+    recognizeFaces,
   };
 }
 

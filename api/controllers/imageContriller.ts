@@ -64,6 +64,7 @@ const ImageControllerFactory = (
         const fileKey: string = uuidv4();
 
         listCache.set(fileKey, {
+          key: fileKey,
           name: file.name,
           mimetype: file.mimetype,
           tempFilePath: file.tempFilePath,
@@ -88,7 +89,11 @@ const ImageControllerFactory = (
    * Process image (recognising faces)
    * @route POST /images/:id/process
    */
-  const faceRecognizeById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const faceRecognizeById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     const imageId = req.params['id'];
 
     const image = listCache.get(imageId);
@@ -105,16 +110,13 @@ const ImageControllerFactory = (
 
       image.state = RecogniseImageState.DONE;
       image.faces = frResult;
-
     } catch (err) {
       image.state = RecogniseImageState.ERROR;
-
-      return next(err);
     }
 
     res.send({
       success: true,
-      message: 'done',
+      data: image,
     });
   };
 

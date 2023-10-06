@@ -6,6 +6,7 @@ export enum RecogniseImageState {
 }
 
 export type RecogniseImage = {
+  key: string;
   name: string;
   mimetype: string;
   tempFilePath: string;
