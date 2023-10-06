@@ -13,6 +13,9 @@ function Layout() {
         <li>
           <Link to="/">Home</Link>
         </li>
+        <li>
+          <Link to="/images">Images</Link>
+        </li>
       </ul>
 
       <Outlet />

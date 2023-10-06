@@ -29,9 +29,16 @@ const ImageControllerFactory = (
   const list = async (
     req: Request,
     res: Response,
-    _next: NextFunction,
+    next: NextFunction,
   ): Promise<void> => {
-    res.send(Object.fromEntries(listCache));
+    try {
+      res.send({
+        success: true,
+        data: Object.fromEntries(listCache),
+      });
+    } catch (err) {
+      return next(err);
+    }
   }
 
   /**
@@ -70,7 +77,7 @@ const ImageControllerFactory = (
       res.send({
         success: true,
         message: 'uploaded',
-        filesKeys,
+        data: filesKeys,
       });
     } catch (err) {
       return next(err);

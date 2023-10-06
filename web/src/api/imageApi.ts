@@ -1,36 +1,35 @@
-const AuthApi = (): {
-  login: (userName: string) => Promise<string>,
+import { RecogniseImage } from '../type/RecogniseImage';
+
+const ImageApi = (): {
+  list: () => Promise<RecogniseImage[]>,
 } => {
-  const login = async (userName: string): Promise<string> => {
+  const list = async (): Promise<RecogniseImage[]> => {
     const res = await fetch(
-      process.env.REACT_APP_API_URL + '/login',
+      process.env.REACT_APP_API_URL + '/images',
       {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'content-type': 'application/json',
         },
-        body: JSON.stringify({
-          userName,
-        }),
       } as RequestInit);
 
     const result = await res.json() as unknown as {
       success: boolean,
       message?: string,
-      token?: string,
+      data?: RecogniseImage[],
     };
 
     if (!result.success) {
       throw new Error(result.message!);
     }
 
-    return result.token!;
+    return result.data!;
   }
 
   return {
-    login,
+    list,
   };
 }
 
-export default AuthApi();
+export default ImageApi();
 

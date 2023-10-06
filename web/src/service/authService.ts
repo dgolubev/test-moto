@@ -1,6 +1,6 @@
 import authApi from '../api/authApi';
 
-interface AuthProvider {
+interface AuthService {
   isAuthenticated: () => boolean;
   getUserName: () => string | undefined;
   getToken: () => string | undefined;
@@ -8,7 +8,7 @@ interface AuthProvider {
   signOut(): Promise<void>;
 }
 
-const authProvider = ((): AuthProvider => {
+const authProvider = ((): AuthService => {
   let _isAuthenticated: boolean = false;
   let _userName: string | undefined = undefined;
   let _token: string | undefined = undefined;
