@@ -4,8 +4,11 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { authProvider } from '../../service/authService';
-import { redirect } from 'react-router-dom';
+import { authProvider } from '../../service/authProvider';
+import {
+  redirect,
+  useNavigate,
+} from 'react-router-dom';
 import { AppRoutes } from '../../router';
 import imageApi from '../../api/imageApi';
 import {
@@ -21,12 +24,28 @@ function ImagesPage(): JSX.Element {
     [RecogniseImageState.ERROR]: 'Error',
   };
 
+  const navigate = useNavigate();
+
   const [images, setImages] = useState<Map<string, RecogniseImage>>(new Map());
   const [uploadImage, setUploadImage] = useState<File>();
 
   useEffect(() => {
+    checkAuth();
+  });
+
+  useEffect(() => {
     fetchImages();
   }, []);
+
+  async function checkAuth() {
+    if (await authProvider.isAuthenticated()) {
+      return;
+    }
+
+    authProvider.signOut();
+
+    navigate(AppRoutes.LOGIN);
+  }
 
   async function fetchImages() {
     setImages(new Map(Object.entries(await imageApi.getList())));
@@ -85,8 +104,8 @@ function ImagesPage(): JSX.Element {
       );
 
       await fetchImages();
-    } catch {
-      console.log('error');
+    } catch (err) {
+      console.log('error', err);
     }
   };
 
@@ -111,7 +130,7 @@ function ImagesPage(): JSX.Element {
             {
               ...img,
               state: result.state,
-              faces: result.faces,
+              faces: result.faces ?? undefined,
             }
           );
 
@@ -177,7 +196,7 @@ function ImagesPage(): JSX.Element {
 }
 
 async function loader() {
-  if (!authProvider.isAuthenticated()) {
+  if (!await authProvider.isAuthenticated()) {
     return redirect(AppRoutes.LOGIN);
   }
 

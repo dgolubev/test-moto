@@ -4,6 +4,7 @@ import config from './config';
 import logger from 'morgan';
 import cors from 'cors';
 import configureFileUpload from './configurator/configureFileUpload';
+import errorHandler from './middleware/errorHandler';
 
 const port = config.APP_PORT;
 
@@ -17,6 +18,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(routes());
+
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

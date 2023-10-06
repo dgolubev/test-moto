@@ -6,7 +6,7 @@ import {
   useActionData,
   useNavigation,
 } from 'react-router-dom';
-import { authProvider } from '../../service/authService';
+import { authProvider } from '../../service/authProvider';
 import { AppRoutes } from '../../router';
 
 const FIELD = {
@@ -65,16 +65,7 @@ async function loginAction({ request }: LoaderFunctionArgs) {
   return redirect(AppRoutes.HOME);
 }
 
-async function loginLoader() {
-  if (authProvider.isAuthenticated()) {
-    return redirect(AppRoutes.HOME);
-  }
-
-  return null;
-}
-
 export {
   LoginPage as component,
   loginAction as action,
-  loginLoader as loader,
 };

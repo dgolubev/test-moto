@@ -1,33 +1,38 @@
 import authApi from '../api/authApi';
 
-interface AuthService {
-  isAuthenticated: () => boolean;
+export interface AuthProvider {
+  isAuthenticated: () => Promise<boolean>;
   getUserName: () => string | undefined;
   getToken: () => string | undefined;
-  signIn(userName: string): Promise<void>;
-  signOut(): Promise<void>;
+  signIn: (userName: string) => Promise<void>;
+  signOut: () => void;
 }
 
-const authProvider = ((): AuthService => {
-  let _isAuthenticated: boolean = false;
+const authProvider = ((): AuthProvider => {
   let _userName: string | undefined = undefined;
   let _token: string | undefined = undefined;
 
   const signIn = async (userName: string): Promise<void> => {
     _token = await authApi.login(userName);
 
-    _isAuthenticated = true;
     _userName = userName;
   };
 
-  const signOut = async (): Promise<void> => {
-    _isAuthenticated = false;
+  const signOut = (): void => {
     _token = undefined;
     _userName = undefined;
   };
 
-  const isAuthenticated = (): boolean => {
-    return _isAuthenticated;
+  const isAuthenticated = async (): Promise<boolean> => {
+    if (!_token) {
+      return false;
+    }
+
+    try {
+      return authApi.isAuth(_token);
+    } catch (err) {
+      return false;
+    }
   }
 
   const getUserName = (): string | undefined => {

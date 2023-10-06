@@ -8,6 +8,7 @@ import userService, { UserService } from '../service/userService';
 
 export interface UserController {
   login: RequestHandler;
+  isAuth: RequestHandler;
 }
 
 const UserControllerFactory = (
@@ -40,8 +41,31 @@ const UserControllerFactory = (
     }
   };
 
+  /**
+   * User authentication
+   * @route POST /login
+   */
+  const isAuth = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    const token = req.params.token;
+
+    try {
+      userService.verifyAccessToken(token);
+
+      res.send({
+        success: true,
+      });
+    } catch (err) {
+      return next(err);
+    }
+  };
+
   return {
     login,
+    isAuth,
   };
 };
 

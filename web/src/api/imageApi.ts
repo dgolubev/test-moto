@@ -1,6 +1,15 @@
-import { RecogniseImage } from '../type/RecogniseImage';
+import {
+  RecogniseImage,
+  RecogniseImageState,
+} from '../type/RecogniseImage';
+import {
+  AuthProvider,
+  authProvider,
+} from '../service/authProvider';
 
-const ImageApi = (): {
+const ImageApi = (
+  authProvider: AuthProvider,
+): {
   getList: () => Promise<Record<string, RecogniseImage>>,
   upload: (formData: FormData) => Promise<any>,
   recognizeFaces: (key: string) => Promise<RecogniseImage>,
@@ -17,6 +26,7 @@ const ImageApi = (): {
         method: 'GET',
         headers: {
           'content-type': 'application/json',
+          'Authorization': authProvider.getToken(),
         },
       } as RequestInit);
 
@@ -26,22 +36,21 @@ const ImageApi = (): {
       data?: Record<string, RecogniseImage>,
     };
 
-    if (!result.success) {
-      throw new Error(result.message!);
-    }
-
-    return result.data!;
+    return result.success ? result.data! : {};
   }
 
   /**
    * Image upload
    * @param formData form data
    */
-  const upload = (formData: FormData): Promise<any> => {
-    return fetch(
+  const upload = async (formData: FormData): Promise<void> => {
+    await fetch(
       apiUrl + '/images/upload',
       {
         method: 'POST',
+        headers: {
+          'Authorization': authProvider.getToken(),
+        },
         body: formData,
       } as RequestInit);
   };
@@ -56,7 +65,10 @@ const ImageApi = (): {
       apiUrl + '/images/' + key + '/process',
       {
         method: 'POST',
-        'content-type': 'application/json',
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': authProvider.getToken(),
+        },
       } as RequestInit);
 
     const result = await res.json() as unknown as {
@@ -66,7 +78,9 @@ const ImageApi = (): {
     };
 
     if (!result.success) {
-      throw new Error(result.message!);
+      return {
+        state: RecogniseImageState.ERROR,
+      } as RecogniseImage;
     }
 
     return result.data!;
@@ -79,5 +93,7 @@ const ImageApi = (): {
   };
 }
 
-export default ImageApi();
+export default ImageApi(
+  authProvider,
+);
 

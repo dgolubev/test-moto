@@ -27,7 +27,10 @@ export const AuthMiddlewareFactory = (
         userService.releaseUserName(authToken);
       }
 
-      next(err);
+      res.status(http2.constants.HTTP_STATUS_UNAUTHORIZED)
+        .send({
+          success: false,
+        });
     }
   };
 };

@@ -2,17 +2,15 @@ import {
   createBrowserRouter,
   redirect,
 } from "react-router-dom";
-import { authProvider } from './service/authService';
+import { authProvider } from './service/authProvider';
 import * as LoginPage from './page/login/LoginPage';
 import { Layout } from './page/Layout';
-import * as HomePage from './page/home/HomePage';
 import * as ImagesPage from './page/images/ImagesPage';
 
 enum AppRoutes {
   HOME = '/',
   LOGIN = '/login',
   LOGOUT = '/logout',
-  IMAGES = '/images',
 }
 
 const router = createBrowserRouter([
@@ -28,18 +26,14 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        loader: HomePage.loader,
-        Component: HomePage.component,
+        loader: ImagesPage.loader,
+        Component: ImagesPage.component,
       },
+
       {
         path: AppRoutes.LOGIN,
         action: LoginPage.action,
-        loader: LoginPage.loader,
         Component: LoginPage.component,
-      },
-      {
-        path: AppRoutes.IMAGES,
-        Component: ImagesPage.component,
       },
     ],
   },
