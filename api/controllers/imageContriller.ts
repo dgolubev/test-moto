@@ -103,19 +103,20 @@ const ImageControllerFactory = (
 
     image.state = RecogniseImageState.IN_PROCESS;
 
-    const imagePath = image.tempFilePath;
-
     try {
-      const frResult = await faceRecognitionSrv.recognise(imagePath);
+      const frResult = await faceRecognitionSrv.recognise(image);
 
       image.state = RecogniseImageState.DONE;
       image.faces = frResult;
+
     } catch (err) {
+      console.log(err);
+
       image.state = RecogniseImageState.ERROR;
     }
 
     res.send({
-      success: true,
+      success: image.state !== RecogniseImageState.ERROR,
       data: image,
     });
   };
